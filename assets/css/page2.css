@@ -1,0 +1,41 @@
+*{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+body{
+    /* display: flex;
+    flex-flow: column wrap; */
+    width: 100vw;
+    height: 100vh;
+    /* overflow: hidden; */
+    /* remove overflow  */
+}
+
+#poster{
+    max-height: 100%;
+    object-fit: cover;
+    padding-bottom: 1em;
+}
+
+.media-left{
+ width: 35%;
+}
+
+.card{
+    max-height: 100%;
+    width: 100vw;
+    height: 100vh;
+}
+
+header h1{
+    font-size: 200%;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+#stream-platform{
+    display: flex;
+    flex-flow: row;
+    
+}
