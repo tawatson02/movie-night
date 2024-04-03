@@ -2,6 +2,7 @@ const baseURL = 'https://api.themoviedb.org/3/movie/'
 let randomNumber = getRandomNumber();
 let rmovieURL = `${baseURL}${randomNumber}?api_key=9ac847364cd064efb7e479c53ce0e809`
 
+let previousMovie = [];
 
 let randomMovie = document.querySelector('#random')
 function getTMDB() {
@@ -31,12 +32,51 @@ function getTMDB() {
         getRandomNumber()
         getTMDB()
       }
+      else{
+        function saveMovieDetails(){
+          const mDetails = {
+             mPoster: data.poster_path,
+             mTitle: data.title,
+             mRating: data.popularity,
+             mDescription: data.overview,
+           }
+         
+         previousMovie.push(mDetails)
+         console.log(previousMovie)
+
+         }
+         saveMovieDetails();
+         storeMovies();
+         const moviePoster = document.querySelector('#poster')
+         const movieTitle = document.querySelector('#movie-title')
+         const movieRating = document.querySelector('#movie-rating')
+         const movieDesc = document.querySelector('#movie-description')
+         
+         for (let i = 0; i < previousMovie.length; i++) {
+          const pMovie = previousMovie[i];
+          if (data.poster_path === null) {
+            moviePoster.src = './assets/images/tvPlaceholderproject1.jpg'
+          }
+          else{
+            moviePoster.src = 'https://media.themoviedb.org/t/p/w220_and_h330_face' + pMovie.mPoster;
+          }
+        
+         movieTitle.textContent = pMovie.mTitle;
+         movieRating.textContent = pMovie.mRating;
+         movieDesc.textContent = pMovie.mDescription;
+         }
+        
+
+      }
     }
     )
     .catch(err =>
       console.error(err));
   // console.log("this button works",response)
+  
 };
+
+
 randomMovie.addEventListener('click', getTMDB)
 // randomMovie.addEventListener('click', getRandomNumber)
 function getRandomNumber() {
@@ -55,6 +95,9 @@ console.log(randomNumber);
 // 1268029 as final number 
 
 
+function storeMovies(){
+  localStorage.setItem('previousMovie', JSON.stringify(previousMovie))
+}
 
-
-
+// will get a random movie on page load
+// getTMDB();
