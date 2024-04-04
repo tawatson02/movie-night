@@ -1,5 +1,6 @@
 *{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    
 }
 
 body{
@@ -39,3 +40,34 @@ header h1{
     flex-flow: row;
     justify-content: center;
 }
+.clicked{
+    display: flex;
+    justify-content: center;
+    
+}
+.clicked button{
+    margin-left: 10px;
+}
+
+
+@media screen and (max-width: 992px) {
+    .media {
+        flex-direction: column;
+    }
+    .media-left{
+        width: 100%;
+    }
+    /* #poster{
+        justify-content: center;
+    } */
+    
+}
+/* @media screen and (max-width: 768px) {
+    .media {
+        flex-direction: column;
+       
+    } */
+    /* #poster{
+        justify-content: center;
+    } */
+/* } */
