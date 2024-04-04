@@ -118,9 +118,22 @@ function getStreaming() {
 
   fetch(url, options)
   .then(response => response.json())
-  .then(data => console.log(data))
+  .then(data => {console.log(data)
+  let filteredData = data.result.streamingInfo.us.filter((item)=> item.streamingType=="subscription")
+  console.log(filteredData)
+  function streamData () {
+    const streamPlatform = document.querySelector("#stream-platform")
+    const div = document.createElement("div")
+    div.textContent = filteredData.service
+    streamPlatform.append(div)
+  }
+streamData()
+})
+
+
   .catch(err =>
     console.error(err));
 
 }
 getStreaming();
+
