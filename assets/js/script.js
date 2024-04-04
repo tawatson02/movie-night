@@ -1,12 +1,14 @@
 const baseURL = 'https://api.themoviedb.org/3/movie/'
-let randomNumber = getRandomNumber();
+const streamingURL = 'https://streaming-availability.p.rapidapi.com/get?output_language=en&tmdb_id=movie%2F'
+let randomNumber = '373571';
+let rStreamingURL = `${streamingURL}${randomNumber}`
 let rmovieURL = `${baseURL}${randomNumber}?api_key=9ac847364cd064efb7e479c53ce0e809`
 
 let previousMovie = [];
 
 let randomMovie = document.querySelector('#random')
 function getTMDB() {
-  randomNumber = getRandomNumber();
+  randomNumber = '373571';
   rmovieURL = `${baseURL}${randomNumber}?api_key=9ac847364cd064efb7e479c53ce0e809`
   console.log(randomNumber);
   const options = {
@@ -32,40 +34,40 @@ function getTMDB() {
         getRandomNumber()
         getTMDB()
       }
-      else{
-        function saveMovieDetails(){
+      else {
+        function saveMovieDetails() {
           const mDetails = {
-             mPoster: data.poster_path,
-             mTitle: data.title,
-             mRating: data.popularity,
-             mDescription: data.overview,
-           }
-         
-         previousMovie.push(mDetails)
-         console.log(previousMovie)
+            mPoster: data.poster_path,
+            mTitle: data.title,
+            mRating: data.vote_average,
+            mDescription: data.overview,
+          }
 
-         }
-         saveMovieDetails();
-         storeMovies();
-         const moviePoster = document.querySelector('#poster')
-         const movieTitle = document.querySelector('#movie-title')
-         const movieRating = document.querySelector('#movie-rating')
-         const movieDesc = document.querySelector('#movie-description')
-         
-         for (let i = 0; i < previousMovie.length; i++) {
+          previousMovie.push(mDetails)
+          console.log(previousMovie)
+
+        }
+        saveMovieDetails();
+        storeMovies();
+        const moviePoster = document.querySelector('#poster')
+        const movieTitle = document.querySelector('#movie-title')
+        const movieRating = document.querySelector('#movie-rating')
+        const movieDesc = document.querySelector('#movie-description')
+
+        for (let i = 0; i < previousMovie.length; i++) {
           const pMovie = previousMovie[i];
           if (data.poster_path === null) {
             moviePoster.src = './assets/images/tvPlaceholderproject1.jpg'
           }
-          else{
+          else {
             moviePoster.src = 'https://media.themoviedb.org/t/p/w220_and_h330_face' + pMovie.mPoster;
           }
-        
-         movieTitle.textContent = pMovie.mTitle;
-         movieRating.textContent = pMovie.mRating;
-         movieDesc.textContent = pMovie.mDescription;
-         }
-        
+
+          movieTitle.textContent = pMovie.mTitle;
+          movieRating.textContent = pMovie.mRating + "/10";
+          movieDesc.textContent = pMovie.mDescription;
+        }
+
 
       }
     }
@@ -73,7 +75,7 @@ function getTMDB() {
     .catch(err =>
       console.error(err));
   // console.log("this button works",response)
-  
+
 };
 
 
@@ -95,9 +97,30 @@ console.log(randomNumber);
 // 1268029 as final number 
 
 
-function storeMovies(){
+function storeMovies() {
   localStorage.setItem('previousMovie', JSON.stringify(previousMovie))
 }
 
 // will get a random movie on page load
-// getTMDB();
+getTMDB();
+
+
+
+function getStreaming() {
+  const url = rStreamingURL;
+  const options = {
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': 'be9ee1be2emsh58a6b038feb55f6p193bc4jsn5c0bfcae5e91',
+      'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com'
+    }
+  };
+
+  fetch(url, options)
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(err =>
+    console.error(err));
+
+}
+getStreaming();
