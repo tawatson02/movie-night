@@ -1,28 +1,88 @@
 *{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    
 }
 
-#page1-h1{
-    font-size: 1000%;
+body{
+    /* display: flex;
+    flex-flow: column wrap; */
+    width: 100vw;
+    height: 100vh;
+    /* overflow: hidden; */
+    /* remove overflow  */
 }
 
-/* CSS for index.html */
+#poster{
+    max-height: 100%;
+    object-fit: cover;
+    padding-bottom: 1em;
+    
+}
 
-#movie-night{
+.media-left{
+ width: 35%;
+}
+
+.card{
+    max-height: 100%;
+    width: 100vw;
+    height: 100vh;
+}
+
+header #pageTitle, #recommend{
+    font-size: 200%;
     display: flex;
     justify-content: center;
-    margin-top: 200px;
+    margin: 10px;
 }
 
-#random-movie-button{
+#stream-platform{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+.clicked{
     display: flex;
     justify-content: center;
+    
+}
+.clicked button{
+    margin-left: 10px;
+}
+
+#sPlatform{
+    display: flex;
+    justify-content: start;
     border: solid;
-    font-size: 800%;
+    margin: 10px;
+    padding: 2px 10px 2px 10px;
 }
 
-#random-movie{
-    display: flex;
-    justify-content: center;
+@media screen and (max-width: 992px) {
+    .media {
+        flex-direction: column;
+    }
+    .media-left{
+        width: 100%;
+    }
+    #recommend{
+        display: flex;
+        justify-content: center;
+        
+    }
+
+   
+    /* #poster{
+        justify-content: center;
+    } */
+    
 }
-/* end CSS for index.html */
+/* @media screen and (max-width: 768px) {
+    .media {
+        flex-direction: column;
+       
+    } */
+    /* #poster{
+        justify-content: center;
+    } */
+/* } */

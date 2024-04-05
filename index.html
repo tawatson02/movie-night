@@ -1,31 +1,54 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html class="theme-dark" lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Night</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
-    <link rel="stylesheet" href="./assets/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <title>Movie Night</title>
 </head>
 
 <body>
-    <div>
-        <div>
-            <header id="movie-night">
-                <h1 id="page1-h1">
-                    Movie Night
-                </h1>
-            </header>
+  <header>
+    <h1 id="pageTitle">Movie Night</h1>
+    <h1 id="recommend">
+      Here's your movie recommendation...
+    </h1>
+  </header>
+  <div class="card">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-2by3">
+            <img id="poster" alt="Placeholder image" />
+          </figure>
+          <br>
         </div>
-        <div id="random-movie">
-            <a href="page2.html"><button id="random-movie-button">
-                    Pick a movie
-                </button>
-            </a>
+        <div class="is-flex-direction-column">
+          <div class="media-content">
+            <p class="title is-4 m-1" id="movie-title"></p>
+            <p class="subtitle is-6 m-1" id="movie-rating"></p>
+          </div>
+          <div class="content m-1">
+            <div id="movie-description"></div>
+            <br />
+           <div class="title is-4 mt-3">
+              Where to Find...
+            </div>
+            <div id="stream-platform">
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+    <footer>
+      <div class="clicked">
+          <button class="button is-medium is-responsive" id="back"> Back</button>
+          <button class="button is-medium is-responsive" id="random">Random</button>
+      </div>
+    </footer>
     <script type="text/javascript" src="./assets/js/script.js"></script>
 </body>
 
-</html> -->
+</html>
