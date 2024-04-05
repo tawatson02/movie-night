@@ -1,14 +1,26 @@
+const moviePoster = document.querySelector('#poster')
+const movieTitle = document.querySelector('#movie-title')
+const movieRating = document.querySelector('#movie-rating')
+const movieDesc = document.querySelector('#movie-description')
+let randomMovie = document.querySelector('#random')
+const backButton = document.querySelector('#back')
 const baseURL = 'https://api.themoviedb.org/3/movie/'
 const streamingURL = 'https://streaming-availability.p.rapidapi.com/get?output_language=en&tmdb_id=movie%2F'
-let randomNumber = '373571';
+let randomNumber = getRandomNumber();
 let rStreamingURL = `${streamingURL}${randomNumber}`
 let rmovieURL = `${baseURL}${randomNumber}?api_key=9ac847364cd064efb7e479c53ce0e809`
 
 let previousMovie = [];
 
-let randomMovie = document.querySelector('#random')
+let currentIndex = previousMovie.length;
+if (localStorage.getItem('previousMovie') !== null) {
+  currentIndex = JSON.parse(localStorage.getItem('previousMovie')).length - 1
+}
+
+
+
 function getTMDB() {
-  randomNumber = '373571';
+  randomNumber = getRandomNumber();
   rmovieURL = `${baseURL}${randomNumber}?api_key=9ac847364cd064efb7e479c53ce0e809`
   console.log(randomNumber);
   const options = {
@@ -26,17 +38,22 @@ function getTMDB() {
         getRandomNumber()
         getTMDB()
       }
-      return response.json()
+      else {
+        return response.json()
+      }
+
     })
     .then(data => {
       console.log(data)
       if (data.adult === true) {
         getRandomNumber()
         getTMDB()
+        return false;
       }
       else {
         function saveMovieDetails() {
           const mDetails = {
+            mID: data.id,
             mPoster: data.poster_path,
             mTitle: data.title,
             mRating: data.vote_average,
@@ -45,14 +62,15 @@ function getTMDB() {
 
           previousMovie.push(mDetails)
           console.log(previousMovie)
-
+          getStreaming();
+          storeMovies();
         }
         saveMovieDetails();
-        storeMovies();
-        const moviePoster = document.querySelector('#poster')
-        const movieTitle = document.querySelector('#movie-title')
-        const movieRating = document.querySelector('#movie-rating')
-        const movieDesc = document.querySelector('#movie-description')
+
+        // const moviePoster = document.querySelector('#poster')
+        // const movieTitle = document.querySelector('#movie-title')
+        // const movieRating = document.querySelector('#movie-rating')
+        // const movieDesc = document.querySelector('#movie-description')
 
         for (let i = 0; i < previousMovie.length; i++) {
           const pMovie = previousMovie[i];
@@ -98,6 +116,7 @@ console.log(randomNumber);
 
 
 function storeMovies() {
+  currentIndex = previousMovie.length
   localStorage.setItem('previousMovie', JSON.stringify(previousMovie))
 }
 
@@ -111,29 +130,88 @@ function getStreaming() {
   const options = {
     method: 'GET',
     headers: {
-      'X-RapidAPI-Key': 'be9ee1be2emsh58a6b038feb55f6p193bc4jsn5c0bfcae5e91',
+      'X-RapidAPI-Key': 'd7ccc3d62fmshc0f593796a8742cp1a0bd4jsn0f505ecc2775',
       'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com'
     }
   };
 
   fetch(url, options)
-  .then(response => response.json())
-  .then(data => {console.log(data)
-  let filteredData = data.result.streamingInfo.us.filter((item)=> item.streamingType=="subscription")
-  console.log(filteredData)
-  function streamData () {
-    const streamPlatform = document.querySelector("#stream-platform")
-    const div = document.createElement("div")
-    div.textContent = filteredData.service
-    streamPlatform.append(div)
-  }
-streamData()
-})
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      // let filteredData = data.result.streamingInfo.us.filter((item) => item.streamingType == "subscription")
+      // console.log(filteredData)
+      function streamData() {
+        const streamPlatform = document.querySelector("#stream-platform")
+        streamPlatform.innerHTML = '';
+        if(data.message === "Not Found" ||
+          data?.result?.streamingInfo?.us === undefined){
+          
+          const div = document.createElement("div")
+          div.id = 'sPlatform'
+          div.textContent = 'This movie isnt available to stream'
+          streamPlatform.append(div)
+        }
+        else{
+          let filteredData = data.result.streamingInfo.us.filter((item) => item.streamingType == "subscription")
+          for (let i = 0; i < filteredData.length; i++) {
+            const fData = filteredData[i];
+            const div = document.createElement("div")
+            div.id = 'sPlatform'
+            div.textContent = fData.service
+            streamPlatform.append(div)
+        }
+        // iterate through previousMovie array and add streamPlatform to each object in previousMovie array.
+        for (let i = 0; i < previousMovie.length; i++) {
+          const pMovie = previousMovie[i];
+
+          pMovie.streamPlatform = filteredData
+          storeMovies();
+          
+        }
+
+      }
+    }
+      streamData()
+    })
 
 
-  .catch(err =>
-    console.error(err));
+    .catch(err =>
+      console.error(err));
 
 }
-getStreaming();
 
+
+
+backButton.addEventListener('click', getPreviousMovie)
+function getPreviousMovie() {
+  init();
+  console.log(currentIndex)
+  currentIndex--;
+  console.log(currentIndex)
+  console.log(previousMovie)
+
+  const pMovie = previousMovie[currentIndex];
+  if (pMovie.mPoster === null) {
+    moviePoster.src = './assets/images/tvPlaceholderproject1.jpg'
+  }
+  else {
+    moviePoster.src = 'https://media.themoviedb.org/t/p/w220_and_h330_face' + pMovie.mPoster;
+  }
+  movieTitle.textContent = pMovie.mTitle;
+  movieRating.textContent = pMovie.mRating + "/10";
+  movieDesc.textContent = pMovie.mDescription;
+}
+
+
+
+
+
+function init() {
+  const storedMovies = JSON.parse(localStorage.getItem('previousMovie'));
+  if (storedMovies !== null) {
+    previousMovie = storedMovies;
+  }
+};
+init();
+console.log(previousMovie)
