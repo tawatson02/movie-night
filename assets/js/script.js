@@ -116,7 +116,7 @@ console.log(randomNumber);
 
 
 function storeMovies() {
-  currentIndex = previousMovie.length
+  currentIndex = previousMovie.length -1
   localStorage.setItem('previousMovie', JSON.stringify(previousMovie))
 }
 
