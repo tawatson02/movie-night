@@ -17,12 +17,9 @@ if (localStorage.getItem('previousMovie') !== null) {
   currentIndex = JSON.parse(localStorage.getItem('previousMovie')).length - 1
 }
 
-
-
 function getTMDB() {
   randomNumber = getRandomNumber();
   rmovieURL = `${baseURL}${randomNumber}?api_key=9ac847364cd064efb7e479c53ce0e809`
-  console.log(randomNumber);
   const options = {
     method: 'GET',
     headers: {
@@ -33,7 +30,6 @@ function getTMDB() {
 
   fetch(rmovieURL, options)
     .then(response => {
-      console.log(response)
       if (response.status > 400) {
         getRandomNumber()
         getTMDB()
@@ -44,7 +40,6 @@ function getTMDB() {
 
     })
     .then(data => {
-      console.log(data)
       if (data.adult === true) {
         getRandomNumber()
         getTMDB()
@@ -61,16 +56,11 @@ function getTMDB() {
           }
 
           previousMovie.push(mDetails)
-          console.log(previousMovie)
           getStreaming();
           storeMovies();
         }
         saveMovieDetails();
 
-        // const moviePoster = document.querySelector('#poster')
-        // const movieTitle = document.querySelector('#movie-title')
-        // const movieRating = document.querySelector('#movie-rating')
-        // const movieDesc = document.querySelector('#movie-description')
 
         for (let i = 0; i < previousMovie.length; i++) {
           const pMovie = previousMovie[i];
@@ -92,13 +82,11 @@ function getTMDB() {
     )
     .catch(err =>
       console.error(err));
-  // console.log("this button works",response)
 
 };
 
 
 randomMovie.addEventListener('click', getTMDB)
-// randomMovie.addEventListener('click', getRandomNumber)
 function getRandomNumber() {
   let randomNumber = Math.random()
   let scaledNumber = randomNumber * (1268029 - 373816) + 373816;
@@ -108,22 +96,12 @@ function getRandomNumber() {
   return result;
 }
 
-
-console.log(randomNumber);
-
-// 373816 used as starter number 
-// 1268029 as final number 
-
-
 function storeMovies() {
-  currentIndex = previousMovie.length -1
+  currentIndex = previousMovie.length - 1
   localStorage.setItem('previousMovie', JSON.stringify(previousMovie))
 }
 
-// will get a random movie on page load
 getTMDB();
-
-
 
 function getStreaming() {
   const url = rStreamingURL;
@@ -138,21 +116,18 @@ function getStreaming() {
   fetch(url, options)
     .then(response => response.json())
     .then(data => {
-      console.log(data)
-      // let filteredData = data.result.streamingInfo.us.filter((item) => item.streamingType == "subscription")
-      // console.log(filteredData)
       function streamData() {
         const streamPlatform = document.querySelector("#stream-platform")
         streamPlatform.innerHTML = '';
-        if(data.message === "Not Found" ||
-          data?.result?.streamingInfo?.us === undefined){
-          
+        if (data.message === "Not Found" ||
+          data?.result?.streamingInfo?.us === undefined) {
+
           const div = document.createElement("div")
           div.id = 'sPlatform'
           div.textContent = 'This movie isnt available to stream'
           streamPlatform.append(div)
         }
-        else{
+        else {
           let filteredData = data.result.streamingInfo.us.filter((item) => item.streamingType == "subscription")
           for (let i = 0; i < filteredData.length; i++) {
             const fData = filteredData[i];
@@ -160,18 +135,17 @@ function getStreaming() {
             div.id = 'sPlatform'
             div.textContent = fData.service
             streamPlatform.append(div)
-        }
-        // iterate through previousMovie array and add streamPlatform to each object in previousMovie array.
-        for (let i = 0; i < previousMovie.length; i++) {
-          const pMovie = previousMovie[i];
+          }
+          for (let i = 0; i < previousMovie.length; i++) {
+            const pMovie = previousMovie[i];
 
-          pMovie.streamPlatform = filteredData
-          storeMovies();
-          
-        }
+            pMovie.streamPlatform = filteredData
+            storeMovies();
 
+          }
+
+        }
       }
-    }
       streamData()
     })
 
@@ -181,15 +155,10 @@ function getStreaming() {
 
 }
 
-
-
 backButton.addEventListener('click', getPreviousMovie)
 function getPreviousMovie() {
   init();
-  console.log(currentIndex)
   currentIndex--;
-  console.log(currentIndex)
-  console.log(previousMovie)
 
   const pMovie = previousMovie[currentIndex];
   if (pMovie.mPoster === null) {
@@ -203,10 +172,6 @@ function getPreviousMovie() {
   movieDesc.textContent = pMovie.mDescription;
 }
 
-
-
-
-
 function init() {
   const storedMovies = JSON.parse(localStorage.getItem('previousMovie'));
   if (storedMovies !== null) {
@@ -214,4 +179,3 @@ function init() {
   }
 };
 init();
-console.log(previousMovie)
